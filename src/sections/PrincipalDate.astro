@@ -1,0 +1,36 @@
+<section class="flex flex-col justify-center items-center text-primary text-center mx-auto mt-32">
+  <div class="flex flex-col items-center justify-center gap-x-2 md:flex-row uppercase text-5xl font-semibold">
+    <h2>4 de Marzo</h2>
+    <span aria-hidden class="hidden md:inline pt-2">•</span>
+    <h2 id="event-time">19:00h CET</h2>
+  </div>
+
+  <div class="text-2xl font-medium uppercase flex flex-col max-w-sm mt-4 mb-6">
+    <h3>Evento de Presentacion</h3>
+    <h3>Teatro Victoria (Barcelona)</h3>
+  </div>
+
+  <a
+    class="border-primary border-2 font-medium uppercase text-lg px-4 py-1 hover:bg-primary hover:text-secondary"
+    target="_blank"
+    rel="noopener"
+    href="https://www.teatrevictoria.com/">Entradas agotadas</a
+  >
+</section>
+
+<script is:inline>
+  const eventTime = document.getElementById("event-time");
+  const END_DATE = 1709535600000;
+  const d = new Date(END_DATE);
+  const time = d.toLocaleTimeString("es", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
+  // get current timezone
+  const tzOffset = d.getTimezoneOffset() / 60;
+  const diff = tzOffset * -1;
+  const gmt = diff > 0 ? `GMT+${diff}` : `GMT-${Math.abs(diff)}`;
+
+  eventTime.innerHTML = `${time}H ${gmt}`;
+</script>
