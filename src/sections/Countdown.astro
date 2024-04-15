@@ -1,4 +1,97 @@
-<section class="text-primary mt-32">
-  <!-- <h1>Countdown section</h1> -->
-  <img src="./favicon.svg" alt="Logo de La Velada" />
+---
+import LaVeladaLogo from "@/icons/la-velada.astro";
+
+// Timestamp in milliseconds: 1730070000000 = 10/27/2024 7:00pm
+const TIMESTAMP_END = 1730070000000;
+---
+
+<section class="flex flex-col items-center justify-center gap-y-12 mb-24">
+  <LaVeladaLogo class="text-primary" />
+
+  <!-- Countdown -->
+  <div
+    class="flex flex-row justify-center text-primary uppercase font-semibold"
+    data-date={TIMESTAMP_END}>
+    <!-- days -->
+    <div class="flex flex-col items-center justify-center gap-y-2 w-16 px-12">
+      <span class="text-4xl tabular-nums" data-days>00</span>
+      <span class="text-xs text-center">Dias</span>
+    </div>
+
+    <span class="text-2xl text-center font-bold mt-1" aria-hidden="true">:</span>
+
+    <!-- hours -->
+    <div class="flex flex-col items-center justify-center gap-y-2 w-16 px-10">
+      <span class="text-4xl tabular-nums" data-hours>00</span>
+      <span class="text-xs text-center">Horas</span>
+    </div>
+
+    <span class="text-2xl text-center font-bold mt-1" aria-hidden="true">:</span>
+
+    <!-- minutes -->
+    <div class="flex flex-col items-center justify-center gap-y-2 w-16 px-10">
+      <span class="text-4xl tabular-nums" data-minutes>00</span>
+      <span class="text-xs text-center">Minutos</span>
+    </div>
+
+    <span class="text-2xl text-center font-bold mt-1" aria-hidden="true">:</span>
+
+    <!-- seconds -->
+    <div class="flex flex-col items-center justify-center gap-y-2 w-16 px-10">
+      <span class="text-4xl tabular-nums" data-seconds>00</span>
+      <span class="text-xs text-center">Segundos</span>
+    </div>
+  </div>
 </section>
+
+<script>
+  const SECOND = 1000;
+  const MINUTE = SECOND * 60;
+  const HOUR = MINUTE * 60;
+  const DAY = HOUR * 24;
+
+  function init() {
+    const $countdown = document.querySelector("[data-date]");
+    if (!$countdown) return;
+
+    const timestamp = $countdown.getAttribute("data-date");
+    if (!timestamp) return;
+
+    const $days = $countdown.querySelector("[data-days]");
+    const $hours = $countdown.querySelector("[data-hours]");
+    const $minutes = $countdown.querySelector("[data-minutes]");
+    const $seconds = $countdown.querySelector("[data-seconds]");
+
+    const end_date = new Date(+timestamp).getTime();
+
+    const formatTime = (time: number) => {
+      return Math.floor(time).toString().padStart(2, "0");
+    };
+
+    function updateCountdown() {
+      const now = Date.now();
+      const diff = end_date - now;
+
+      if ($days instanceof HTMLElement) {
+        $days.innerText = formatTime(diff / DAY);
+      }
+
+      if ($hours instanceof HTMLElement) {
+        $hours.innerText = formatTime((diff % DAY) / HOUR);
+      }
+
+      if ($minutes instanceof HTMLElement) {
+        $minutes.innerText = formatTime((diff % HOUR) / MINUTE);
+      }
+
+      if ($seconds instanceof HTMLElement) {
+        $seconds.innerText = formatTime((diff % MINUTE) / SECOND);
+      }
+    }
+
+    setInterval(updateCountdown, SECOND);
+    updateCountdown();
+  }
+
+  init();
+</script>
