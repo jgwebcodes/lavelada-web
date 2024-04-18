@@ -19,11 +19,15 @@
   // Renderer
   const renderer = new THREE.WebGLRenderer();
   renderer.setSize(w, h);
-  renderer.setClearColor(0xdddddd, 1);
-  // renderer.setClearColor(0xffffff, 1);
+  renderer.setClearColor(0x333333, 1);
 
   // Adding the renderer on the background element
   background?.appendChild(renderer.domElement);
+
+  // directional light
+  const light = new THREE.DirectionalLight(0xdddddd, 0.5);
+  light.position.set(-1, 2, 1);
+  scene.add(light);
 
   // Smoke particles background
   const smokeParticles: THREE.Mesh[] = [];
@@ -31,7 +35,7 @@
   const loader = new THREE.TextureLoader();
   loader.crossOrigin = "";
 
-  loader.load("./assets/images/smoke1.avif", (texture) => {
+  loader.load("./assets/images/smoke1.png", (texture) => {
     const smokeGeometry = new THREE.PlaneGeometry(300, 300);
     const smokeMaterial = new THREE.MeshLambertMaterial({
       map: texture,
@@ -65,7 +69,7 @@
     requestAnimationFrame(animate);
 
     smokeParticles.forEach((particle) => {
-      particle.rotation.z += 0.005;
+      particle.rotation.z += 0.001;
     });
 
     renderer.render(scene, camera);
